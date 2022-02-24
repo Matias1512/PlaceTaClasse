@@ -1,15 +1,24 @@
 <?php return array(
     'root' => array(
-        'pretty_version' => 'v4.4.99',
-        'version' => '4.4.99.0',
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => NULL,
-        'name' => 'symfony/website-skeleton',
+        'reference' => '1d66b16f8a0996d589fa32a9e52411ebf930c26c',
+        'name' => '__root__',
         'dev' => true,
     ),
     'versions' => array(
+        '__root__' => array(
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'type' => 'project',
+            'install_path' => __DIR__ . '/../../',
+            'aliases' => array(),
+            'reference' => '1d66b16f8a0996d589fa32a9e52411ebf930c26c',
+            'dev_requirement' => false,
+        ),
         'doctrine/annotations' => array(
             'pretty_version' => '1.13.2',
             'version' => '1.13.2.0',
@@ -65,12 +74,12 @@
             'dev_requirement' => false,
         ),
         'doctrine/doctrine-bundle' => array(
-            'pretty_version' => '2.5.5',
-            'version' => '2.5.5.0',
+            'pretty_version' => '2.5.6',
+            'version' => '2.5.6.0',
             'type' => 'symfony-bundle',
             'install_path' => __DIR__ . '/../doctrine/doctrine-bundle',
             'aliases' => array(),
-            'reference' => '5c086cbbe5327937dd6f90da075f7d421b0f28bc',
+            'reference' => 'f1423b2a640b6ac545b6e0c02575427a4dc1e9dc',
             'dev_requirement' => false,
         ),
         'doctrine/doctrine-migrations-bundle' => array(
@@ -1226,13 +1235,13 @@
             'reference' => '10c7660d46f6f87c4eb34a8dce89e7f5de2c5931',
             'dev_requirement' => true,
         ),
-        'symfony/website-skeleton' => array(
-            'pretty_version' => 'v4.4.99',
-            'version' => '4.4.99.0',
-            'type' => 'project',
-            'install_path' => __DIR__ . '/../../',
+        'symfony/webpack-encore-bundle' => array(
+            'pretty_version' => 'v1.14.0',
+            'version' => '1.14.0.0',
+            'type' => 'symfony-bundle',
+            'install_path' => __DIR__ . '/../symfony/webpack-encore-bundle',
             'aliases' => array(),
-            'reference' => NULL,
+            'reference' => '1729c314574f32e49f9660a0cee870f7e603864f',
             'dev_requirement' => false,
         ),
         'symfony/yaml' => array(
