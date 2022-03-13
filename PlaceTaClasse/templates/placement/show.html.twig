@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Placement{% endblock %}
+
+{% block body %}
+    <h1>Placement</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ placement.id }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_placement_index') }}">back to list</a>
+
+    <a href="{{ path('app_placement_edit', {'id': placement.id}) }}">edit</a>
+
+    {{ include('placement/_delete_form.html.twig') }}
+{% endblock %}

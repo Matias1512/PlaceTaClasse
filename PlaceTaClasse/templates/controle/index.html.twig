@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Controle index{% endblock %}
+
+{% block body %}
+    <h1>Controle index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>HoraireTTDebut</th>
+                <th>HoraireTTFin</th>
+                <th>HoraireNonTTDebut</th>
+                <th>HoraireNonTTFin</th>
+                <th>Date</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for controle in controles %}
+            <tr>
+                <td>{{ controle.id }}</td>
+                <td>{{ controle.HoraireTTDebut }}</td>
+                <td>{{ controle.HoraireTTFin }}</td>
+                <td>{{ controle.HoraireNonTTDebut }}</td>
+                <td>{{ controle.HoraireNonTTFin }}</td>
+                <td>{{ controle.Date ? controle.Date|date('Y-m-d') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_controle_show', {'id': controle.id}) }}">show</a>
+                    <a href="{{ path('app_controle_edit', {'id': controle.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_controle_new') }}">Create new</a>
+{% endblock %}

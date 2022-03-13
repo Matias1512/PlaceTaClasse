@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Controle{% endblock %}
+
+{% block body %}
+    <h1>Controle</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ controle.id }}</td>
+            </tr>
+            <tr>
+                <th>HoraireTTDebut</th>
+                <td>{{ controle.HoraireTTDebut }}</td>
+            </tr>
+            <tr>
+                <th>HoraireTTFin</th>
+                <td>{{ controle.HoraireTTFin }}</td>
+            </tr>
+            <tr>
+                <th>HoraireNonTTDebut</th>
+                <td>{{ controle.HoraireNonTTDebut }}</td>
+            </tr>
+            <tr>
+                <th>HoraireNonTTFin</th>
+                <td>{{ controle.HoraireNonTTFin }}</td>
+            </tr>
+            <tr>
+                <th>Date</th>
+                <td>{{ controle.Date ? controle.Date|date('Y-m-d') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_controle_index') }}">back to list</a>
+
+    <a href="{{ path('app_controle_edit', {'id': controle.id}) }}">edit</a>
+
+    {{ include('controle/_delete_form.html.twig') }}
+{% endblock %}

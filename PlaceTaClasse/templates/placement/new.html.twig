@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Placement{% endblock %}
+
+{% block body %}
+    <h1>Create new Placement</h1>
+
+    {{ include('placement/_form.html.twig') }}
+
+    <a href="{{ path('app_placement_index') }}">back to list</a>
+{% endblock %}

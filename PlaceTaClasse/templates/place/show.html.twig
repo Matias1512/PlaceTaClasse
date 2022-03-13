@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Place{% endblock %}
+
+{% block body %}
+    <h1>Place</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ place.id }}</td>
+            </tr>
+            <tr>
+                <th>Numero</th>
+                <td>{{ place.Numero }}</td>
+            </tr>
+            <tr>
+                <th>Prise</th>
+                <td>{{ place.Prise ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_place_index') }}">back to list</a>
+
+    <a href="{{ path('app_place_edit', {'id': place.id}) }}">edit</a>
+
+    {{ include('place/_delete_form.html.twig') }}
+{% endblock %}
