@@ -40,10 +40,12 @@ class DoctrineClearEntityManagerWorkerSubscriber implements EventSubscriberInter
         $this->clearEntityManagers();
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
-        yield WorkerMessageHandledEvent::class => 'onWorkerMessageHandled';
-        yield WorkerMessageFailedEvent::class => 'onWorkerMessageFailed';
+        return [
+            WorkerMessageHandledEvent::class => 'onWorkerMessageHandled',
+            WorkerMessageFailedEvent::class => 'onWorkerMessageFailed',
+        ];
     }
 
     private function clearEntityManagers()

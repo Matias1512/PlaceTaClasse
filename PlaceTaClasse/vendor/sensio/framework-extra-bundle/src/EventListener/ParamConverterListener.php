@@ -56,16 +56,16 @@ class ParamConverterListener implements EventSubscriberInterface
             }
         }
 
-        if (\is_array($controller)) {
-            $r = new \ReflectionMethod($controller[0], $controller[1]);
-        } elseif (\is_object($controller) && \is_callable([$controller, '__invoke'])) {
-            $r = new \ReflectionMethod($controller, '__invoke');
-        } else {
-            $r = new \ReflectionFunction($controller);
-        }
-
         // automatically apply conversion for non-configured objects
         if ($this->autoConvert) {
+            if (\is_array($controller)) {
+                $r = new \ReflectionMethod($controller[0], $controller[1]);
+            } elseif (\is_object($controller) && \is_callable([$controller, '__invoke'])) {
+                $r = new \ReflectionMethod($controller, '__invoke');
+            } else {
+                $r = new \ReflectionFunction($controller);
+            }
+
             $configurations = $this->autoConfigure($r, $request, $configurations);
         }
 
@@ -76,7 +76,7 @@ class ParamConverterListener implements EventSubscriberInterface
     {
         foreach ($r->getParameters() as $param) {
             $type = $param->getType();
-            $class = null !== $type && !$type->isBuiltin() ? $type->getName() : null;
+            $class = $this->getParamClassByType($type);
             if (null !== $class && $request instanceof $class) {
                 continue;
             }
@@ -104,8 +104,23 @@ class ParamConverterListener implements EventSubscriberInterface
         return $configurations;
     }
 
+    private function getParamClassByType(?\ReflectionType $type): ?string
+    {
+        if (null === $type) {
+            return null;
+        }
+
+        foreach ($type instanceof \ReflectionUnionType ? $type->getTypes() : [$type] as $type) {
+            if (!$type->isBuiltin()) {
+                return $type->getName();
+            }
+        }
+
+        return null;
+    }
+
     /**
-     * {@inheritdoc}
+     * @return array
      */
     public static function getSubscribedEvents()
     {

@@ -6,6 +6,12 @@
         {# Run `composer require symfony/webpack-encore-bundle`
            and uncomment the following Encore helpers to start using Symfony UX #}
 
+        {% block stylesheets %}
+            {#{{ encore_entry_link_tags('app') }}#}
+        {% endblock %}
+
+        {% block javascripts %}
+            {#{{ encore_entry_script_tags('app') }}#}
             {#DATATABLES#}
             <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.4/datatables.min.css"/>
             <script 
@@ -14,17 +20,16 @@
                 crossorigin="anonymous">
             </script>
             <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.4/datatables.min.js"></script>
-
-        {% block stylesheets %}
-            {#{{ encore_entry_link_tags('app') }}#}
-        {% endblock %}
-
-        {% block javascripts %}
-            {#{{ encore_entry_script_tags('app') }}#}
         {% endblock %}
     </head>
     <body>
         {% block body %}{% endblock %}
-        
+        {% block javascriptsFinTab %}
+        <script type="text/javascript">
+                $(document).ready(function() {
+                    $('#example').DataTable();
+                } );
+        </script>
+        {% endblock %}
     </body>
 </html>

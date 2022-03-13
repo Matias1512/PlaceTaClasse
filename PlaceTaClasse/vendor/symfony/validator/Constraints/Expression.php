@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\Validator\Constraints;
 
+use Symfony\Component\ExpressionLanguage\Expression as ExpressionObject;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Exception\LogicException;
@@ -22,6 +23,7 @@ use Symfony\Component\Validator\Exception\LogicException;
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
+#[\Attribute(\Attribute::TARGET_PROPERTY | \Attribute::TARGET_METHOD | \Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
 class Expression extends Constraint
 {
     public const EXPRESSION_FAILED_ERROR = '6b3befbc-2f01-4ddf-be21-b57898905284';
@@ -34,20 +36,34 @@ class Expression extends Constraint
     public $expression;
     public $values = [];
 
-    public function __construct($options = null)
-    {
+    public function __construct(
+        string|ExpressionObject|array|null $expression,
+        string $message = null,
+        array $values = null,
+        array $groups = null,
+        mixed $payload = null,
+        array $options = []
+    ) {
         if (!class_exists(ExpressionLanguage::class)) {
-            // throw new LogicException(sprintf('The "symfony/expression-language" component is required to use the "%s" constraint.', __CLASS__));
-            @trigger_error(sprintf('Using the "%s" constraint without the "symfony/expression-language" component installed is deprecated since Symfony 4.2.', __CLASS__), \E_USER_DEPRECATED);
+            throw new LogicException(sprintf('The "symfony/expression-language" component is required to use the "%s" constraint.', __CLASS__));
         }
 
-        parent::__construct($options);
+        if (\is_array($expression)) {
+            $options = array_merge($expression, $options);
+        } else {
+            $options['value'] = $expression;
+        }
+
+        parent::__construct($options, $groups, $payload);
+
+        $this->message = $message ?? $this->message;
+        $this->values = $values ?? $this->values;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getDefaultOption()
+    public function getDefaultOption(): ?string
     {
         return 'expression';
     }
@@ -55,7 +71,7 @@ class Expression extends Constraint
     /**
      * {@inheritdoc}
      */
-    public function getRequiredOptions()
+    public function getRequiredOptions(): array
     {
         return ['expression'];
     }
@@ -63,7 +79,7 @@ class Expression extends Constraint
     /**
      * {@inheritdoc}
      */
-    public function getTargets()
+    public function getTargets(): string|array
     {
         return [self::CLASS_CONSTRAINT, self::PROPERTY_CONSTRAINT];
     }
@@ -71,7 +87,7 @@ class Expression extends Constraint
     /**
      * {@inheritdoc}
      */
-    public function validatedBy()
+    public function validatedBy(): string
     {
         return 'validator.expression';
     }

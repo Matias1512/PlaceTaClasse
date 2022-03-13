@@ -11,7 +11,6 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\DependencyInjection;
 
-use Psr\Http\Message\StreamFactoryInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Resource\ClassExistenceResource;
@@ -20,6 +19,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Security\Core\Authorization\ExpressionLanguage as SecurityExpressionLanguage;
 
 /**
@@ -38,9 +38,13 @@ class SensioFrameworkExtraExtension extends Extension
         $definitionsToRemove = [];
 
         if ($config['router']['annotations']) {
-            @trigger_error(sprintf('Enabling the "sensio_framework_extra.router.annotations" configuration is deprecated since version 5.2. Set it to false and use the "%s" annotation from Symfony itself.', \Symfony\Component\Routing\Annotation\Route::class), E_USER_DEPRECATED);
+            @trigger_error(sprintf('Enabling the "sensio_framework_extra.router.annotations" configuration is deprecated since version 5.2. Set it to false and use the "%s" annotation from Symfony itself.', \Symfony\Component\Routing\Annotation\Route::class), \E_USER_DEPRECATED);
 
-            $annotationsToLoad[] = 'routing.xml';
+            if (Kernel::MAJOR_VERSION < 5) {
+                $annotationsToLoad[] = 'routing-4.4.xml';
+            } else {
+                $annotationsToLoad[] = 'routing.xml';
+            }
         }
 
         if ($config['request']['converters']) {
@@ -103,14 +107,6 @@ class SensioFrameworkExtraExtension extends Extension
                 ->addArgument($config['templating']['controller_patterns']);
         }
 
-        if ($config['psr_message']['enabled']) {
-            $loader->load('psr7.xml');
-
-            if (!interface_exists(StreamFactoryInterface::class)) {
-                $definitionsToRemove[] = 'sensio_framework_extra.psr7.argument_value_resolver.server_request';
-            }
-        }
-
         foreach ($definitionsToRemove as $definition) {
             $container->removeDefinition($definition);
         }
@@ -126,6 +122,9 @@ class SensioFrameworkExtraExtension extends Extension
         return __DIR__.'/../Resources/config/schema';
     }
 
+    /**
+     * @return string
+     */
     public function getNamespace()
     {
         return 'http://symfony.com/schema/dic/symfony_extra';

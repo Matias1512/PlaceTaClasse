@@ -1,6 +1,65 @@
 CHANGELOG
 =========
 
+6.0
+---
+
+ * Remove `ArrayDenormalizer::setSerializer()`, call `setDenormalizer()` instead
+ * Remove the ability to create instances of the annotation classes by passing an array of parameters, use named arguments instead
+
+5.4
+---
+
+ * Add support of PHP backed enumerations
+ * Add support for serializing empty array as object
+ * Return empty collections as `ArrayObject` from `Serializer::normalize()` when `PRESERVE_EMPTY_OBJECTS` is set
+ * Add support for collecting type errors during denormalization
+ * Add missing arguments in `MissingConstructorArgumentsException`
+
+5.3
+---
+
+ * Add the ability to provide (de)normalization context using metadata (e.g. `@Symfony\Component\Serializer\Annotation\Context`)
+ * Deprecate `ArrayDenormalizer::setSerializer()`, call `setDenormalizer()` instead
+ * Add normalization formats to `UidNormalizer`
+ * Add `CsvEncoder::END_OF_LINE` context option
+ * Deprecate creating instances of the annotation classes by passing an array of parameters, use named arguments instead
+
+5.2.0
+-----
+
+ * added `CompiledClassMetadataFactory` and `ClassMetadataFactoryCompiler` for faster metadata loading.
+ * added `UidNormalizer`
+ * added `FormErrorNormalizer`
+ * added `MimeMessageNormalizer`
+ * serializer mapping can be configured using php attributes
+
+5.1.0
+-----
+
+ * added support for scalar values denormalization
+ * added support for `\stdClass` to `ObjectNormalizer`
+ * added the ability to ignore properties using metadata (e.g. `@Symfony\Component\Serializer\Annotation\Ignore`)
+ * added an option to serialize constraint violations payloads (e.g. severity)
+
+5.0.0
+-----
+
+ * throw an exception when creating a `Serializer` with normalizers which neither implement `NormalizerInterface` nor `DenormalizerInterface`
+ * throw an exception when creating a `Serializer` with encoders which neither implement `EncoderInterface` nor `DecoderInterface`
+ * changed the default value of the `CsvEncoder` "as_collection" option to `true`
+ * removed `AbstractNormalizer::$circularReferenceLimit`, `AbstractNormalizer::$circularReferenceHandler`,
+   `AbstractNormalizer::$callbacks`, `AbstractNormalizer::$ignoredAttributes`,
+   `AbstractNormalizer::$camelizedAttributes`, `AbstractNormalizer::setCircularReferenceLimit()`,
+   `AbstractNormalizer::setCircularReferenceHandler()`, `AbstractNormalizer::setCallbacks()` and
+   `AbstractNormalizer::setIgnoredAttributes()`, use the default context instead.
+ * removed `AbstractObjectNormalizer::$maxDepthHandler` and `AbstractObjectNormalizer::setMaxDepthHandler()`,
+   use the default context instead.
+ * removed `XmlEncoder::setRootNodeName()` & `XmlEncoder::getRootNodeName()`, use the default context instead.
+ * removed individual encoders/normalizers options as constructor arguments.
+ * removed support for instantiating a `DataUriNormalizer` with a default MIME type guesser when the `symfony/mime` component isn't installed.
+ * removed the `XmlEncoder::TYPE_CASE_ATTRIBUTES` constant. Use `XmlEncoder::TYPE_CAST_ATTRIBUTES` instead.
+
 4.4.0
 -----
 

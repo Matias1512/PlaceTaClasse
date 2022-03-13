@@ -12,7 +12,6 @@
 namespace Symfony\Component\Form\Extension\Core\Type;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Exception\LogicException;
 use Symfony\Component\Form\Extension\Core\DataTransformer\NumberToLocalizedStringTransformer;
 use Symfony\Component\Form\Extension\Core\DataTransformer\StringToFloatTransformer;
@@ -38,19 +37,6 @@ class NumberType extends AbstractType
 
         if ('string' === $options['input']) {
             $builder->addModelTransformer(new StringToFloatTransformer($options['scale']));
-            $builder->addModelTransformer(new CallbackTransformer(
-                function ($value) {
-                    if (\is_float($value) || \is_int($value)) {
-                        @trigger_error(sprintf('Using the %s with float or int data when the "input" option is set to "string" is deprecated since Symfony 4.4 and will throw an exception in 5.0.', self::class), \E_USER_DEPRECATED);
-                        $value = (string) $value;
-                    }
-
-                    return $value;
-                },
-                function ($value) {
-                    return $value;
-                }
-            ));
         }
     }
 
@@ -73,20 +59,21 @@ class NumberType extends AbstractType
             // default scale is locale specific (usually around 3)
             'scale' => null,
             'grouping' => false,
-            'rounding_mode' => NumberToLocalizedStringTransformer::ROUND_HALF_UP,
+            'rounding_mode' => \NumberFormatter::ROUND_HALFUP,
             'compound' => false,
             'input' => 'number',
             'html5' => false,
+            'invalid_message' => 'Please enter a number.',
         ]);
 
         $resolver->setAllowedValues('rounding_mode', [
-            NumberToLocalizedStringTransformer::ROUND_FLOOR,
-            NumberToLocalizedStringTransformer::ROUND_DOWN,
-            NumberToLocalizedStringTransformer::ROUND_HALF_DOWN,
-            NumberToLocalizedStringTransformer::ROUND_HALF_EVEN,
-            NumberToLocalizedStringTransformer::ROUND_HALF_UP,
-            NumberToLocalizedStringTransformer::ROUND_UP,
-            NumberToLocalizedStringTransformer::ROUND_CEILING,
+            \NumberFormatter::ROUND_FLOOR,
+            \NumberFormatter::ROUND_DOWN,
+            \NumberFormatter::ROUND_HALFDOWN,
+            \NumberFormatter::ROUND_HALFEVEN,
+            \NumberFormatter::ROUND_HALFUP,
+            \NumberFormatter::ROUND_UP,
+            \NumberFormatter::ROUND_CEILING,
         ]);
         $resolver->setAllowedValues('input', ['number', 'string']);
         $resolver->setAllowedTypes('scale', ['null', 'int']);
@@ -104,7 +91,7 @@ class NumberType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'number';
     }

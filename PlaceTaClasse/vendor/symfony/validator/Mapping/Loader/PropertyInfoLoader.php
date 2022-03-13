@@ -34,7 +34,7 @@ final class PropertyInfoLoader implements LoaderInterface
     private $listExtractor;
     private $typeExtractor;
     private $accessExtractor;
-    private $classValidatorRegexp;
+    private ?string $classValidatorRegexp;
 
     public function __construct(PropertyListExtractorInterface $listExtractor, PropertyTypeExtractorInterface $typeExtractor, PropertyAccessExtractorInterface $accessExtractor, string $classValidatorRegexp = null)
     {
@@ -119,7 +119,8 @@ final class PropertyInfoLoader implements LoaderInterface
             }
             if (!$hasTypeConstraint) {
                 if (1 === \count($builtinTypes)) {
-                    if ($types[0]->isCollection() && (null !== $collectionValueType = $types[0]->getCollectionValueType())) {
+                    if ($types[0]->isCollection() && \count($collectionValueType = $types[0]->getCollectionValueTypes()) > 0) {
+                        [$collectionValueType] = $collectionValueType;
                         $this->handleAllConstraint($property, $allConstraint, $collectionValueType, $metadata);
                     }
 

@@ -15,7 +15,7 @@
         {
             "name":     "Marco Pivetta",
             "email":    "ocramius@gmail.com",
-            "homepage": "http://ocramius.github.io/"
+            "homepage": "https://ocramius.github.io/"
         },
         {
             "name":     "Nicolas Grekas",
@@ -36,7 +36,7 @@
     },
     "require-dev": {
         "ext-phar":                     "*",
-        "symfony/phpunit-bridge":       "^5.2|^6.0"
+        "symfony/phpunit-bridge":       "^5.4|^6.0"
     },
     "autoload": {
         "psr-4": {

@@ -21,6 +21,7 @@ use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
  * @author Javier Spagnoletti <phansys@gmail.com>
  * @author Hugo Hamon <hugohamon@neuf.fr>
  */
+#[\Attribute(\Attribute::TARGET_PROPERTY | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
 class Timezone extends Constraint
 {
     public const TIMEZONE_IDENTIFIER_ERROR = '5ce113e6-5e64-4ea2-90fe-d2233956db13';
@@ -40,12 +41,26 @@ class Timezone extends Constraint
         self::TIMEZONE_IDENTIFIER_INTL_ERROR => 'TIMEZONE_IDENTIFIER_INTL_ERROR',
     ];
 
-    /**
-     * {@inheritdoc}
-     */
-    public function __construct($options = null)
-    {
-        parent::__construct($options);
+    public function __construct(
+        int|array $zone = null,
+        string $message = null,
+        string $countryCode = null,
+        bool $intlCompatible = null,
+        array $groups = null,
+        mixed $payload = null,
+        array $options = []
+    ) {
+        if (\is_array($zone)) {
+            $options = array_merge($zone, $options);
+        } elseif (null !== $zone) {
+            $options['value'] = $zone;
+        }
+
+        parent::__construct($options, $groups, $payload);
+
+        $this->message = $message ?? $this->message;
+        $this->countryCode = $countryCode ?? $this->countryCode;
+        $this->intlCompatible = $intlCompatible ?? $this->intlCompatible;
 
         if (null === $this->countryCode) {
             if (0 >= $this->zone || \DateTimeZone::ALL_WITH_BC < $this->zone) {
@@ -62,7 +77,7 @@ class Timezone extends Constraint
     /**
      * {@inheritdoc}
      */
-    public function getDefaultOption()
+    public function getDefaultOption(): ?string
     {
         return 'zone';
     }

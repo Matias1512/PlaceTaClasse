@@ -1,6 +1,21 @@
 CHANGELOG
 =========
 
+6.0
+---
+
+* Remove `RemoteJsonManifestVersionStrategy`, use `JsonManifestVersionStrategy` instead
+
+5.3
+---
+
+ * deprecated `RemoteJsonManifestVersionStrategy`, use `JsonManifestVersionStrategy` instead.
+
+5.1.0
+-----
+
+ * added `RemoteJsonManifestVersionStrategy` to download manifest over HTTP.
+
 4.2.0
 -----
 

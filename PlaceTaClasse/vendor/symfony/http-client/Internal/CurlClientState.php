@@ -23,18 +23,18 @@ use Symfony\Component\HttpClient\Response\CurlResponse;
  */
 final class CurlClientState extends ClientState
 {
-    /** @var \CurlMultiHandle|resource|null */
-    public $handle;
-    /** @var \CurlShareHandle|resource|null */
-    public $share;
-    /** @var PushedResponse[] */
-    public $pushedResponses = [];
-    /** @var DnsCache */
-    public $dnsCache;
-    /** @var LoggerInterface|null */
-    public $logger;
+    public ?\CurlMultiHandle $handle;
+    public ?\CurlShareHandle $share;
 
-    public static $curlVersion;
+    /** @var PushedResponse[] */
+    public array $pushedResponses = [];
+    public DnsCache $dnsCache;
+    /** @var float[] */
+    public array $pauseExpiries = [];
+    public int $execCounter = \PHP_INT_MIN;
+    public ?LoggerInterface $logger = null;
+
+    public static array $curlVersion;
 
     public function __construct(int $maxHostConnections, int $maxPendingPushes)
     {
@@ -56,7 +56,7 @@ final class CurlClientState extends ClientState
         }
 
         // Skip configuring HTTP/2 push when it's unsupported or buggy, see https://bugs.php.net/77535
-        if (0 >= $maxPendingPushes || \PHP_VERSION_ID < 70217 || (\PHP_VERSION_ID >= 70300 && \PHP_VERSION_ID < 70304)) {
+        if (0 >= $maxPendingPushes) {
             return;
         }
 
