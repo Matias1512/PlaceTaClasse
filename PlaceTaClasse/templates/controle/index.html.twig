@@ -1,11 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Controle index{% endblock %}
-{% block javascript %}{% endblock %}
-
+{% block title %}Controle{% endblock %}
 
 {% block body %}
-    <h1>Controle index</h1>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.4/datatables.min.css"/>
     <script 
         src="https://code.jquery.com/jquery-3.6.0.min.js" 
@@ -14,7 +11,22 @@
     </script>
     <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.4/datatables.min.js"></script>
 
-    <table class="table">
+    <div class="row">
+        <div class="col-3">
+            <ul class="nav justify-content-start">
+                <li class="nav-item">
+                    <a href="{{ path('app_controle_new') }}">Create new</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ path('app_controle_new') }}">Nettoyer</a>
+                </li>
+        </div>
+        <div class="col-5 offset-1">
+            <h1>Liste des Contrôles</h1>
+        </div>
+    </div>
+    
+    <table id="tableau" class="display" style="width:100%">
         <thead>
             <tr>
                 <th>Id</th>
@@ -48,11 +60,9 @@
 
         <script type="text/javascript">
                 $(document).ready(function() {
-                    $('#example').DataTable();
+                    $('#tableau').DataTable();
                 } );
         </script>
         </tbody>
     </table>
-
-    <a href="{{ path('app_controle_new') }}">Create new</a>
 {% endblock %}

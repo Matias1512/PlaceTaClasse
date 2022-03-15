@@ -24,6 +24,49 @@
         {% endblock %}
     </head>
     <body>
+    {% block nav %}
+            <div class="row">
+                <div class="col-3">
+                    <ul class="nav justify-content-start">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="/controle/">Contrôle</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/mail/">Mails</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-5 offset-1">
+                    <ul class="nav justify-content-left">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/promotion/">Promotions</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/etudiant/">Etudiants</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/module/">Modules</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/enseignant/">Enseignants</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/salle/">Salles</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-2 offset-1">
+                    <ul class="nav justify-content-end">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="/compte">Compte</a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+        {% endblock %}
         {% block body %}{% endblock %}
         {% block javascriptsFinTab %}
         <script type="text/javascript">
