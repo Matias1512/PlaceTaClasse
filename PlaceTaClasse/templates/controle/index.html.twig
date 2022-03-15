@@ -1,9 +1,18 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Controle index{% endblock %}
+{% block javascript %}{% endblock %}
+
 
 {% block body %}
     <h1>Controle index</h1>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.4/datatables.min.css"/>
+    <script 
+        src="https://code.jquery.com/jquery-3.6.0.min.js" 
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" 
+        crossorigin="anonymous">
+    </script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.4/datatables.min.js"></script>
 
     <table class="table">
         <thead>
@@ -36,6 +45,12 @@
                 <td colspan="7">no records found</td>
             </tr>
         {% endfor %}
+
+        <script type="text/javascript">
+                $(document).ready(function() {
+                    $('#example').DataTable();
+                } );
+        </script>
         </tbody>
     </table>
 
