@@ -73,4 +73,9 @@ class ControleController extends AbstractController
 
         return $this->redirectToRoute('app_controle_index', [], Response::HTTP_SEE_OTHER);
     }
+    #[Route('/nettoyer', name: 'app_controle_nettoyer')]
+    public function nettoyer()
+    {
+        
+    }
 }
