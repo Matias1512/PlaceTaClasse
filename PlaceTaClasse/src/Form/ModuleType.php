@@ -12,10 +12,11 @@ class ModuleType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nomLong')
             ->add('nomCourt')
-            ->add('Enseignant')
+            ->add('nomLong')
             ->add('Promotion')
+            ->add('Enseignant')
+            
         ;
     }
 

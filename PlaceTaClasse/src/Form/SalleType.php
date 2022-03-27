@@ -12,11 +12,13 @@ class SalleType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('Plan')
-            ->add('Amphi')
-            ->add('emplacementPrise')
             ->add('Nom')
             ->add('NbPlace')
+            ->add('emplacementPrise')
+            ->add('Amphi')
+            ->add('Plan')
+            
+            
         ;
     }
 

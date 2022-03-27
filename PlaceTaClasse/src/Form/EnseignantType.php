@@ -16,8 +16,6 @@ class EnseignantType extends AbstractType
             ->add('Prenom')
             ->add('Vacataire')
             ->add('Mail')
-            ->add('controlesSurveille')
-            ->add('modules')
         ;
     }
 
