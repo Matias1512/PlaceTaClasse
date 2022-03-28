@@ -3,12 +3,15 @@
 namespace App\Controller;
 
 use App\Entity\Promotion;
+use App\Entity\Etudiant;
 use App\Form\PromotionType;
+use App\Repository\EtudiantRepository;
 use App\Repository\PromotionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\ORM\EntityManagerInterface;
 
 #[Route('/promotion')]
 class PromotionController extends AbstractController
@@ -70,6 +73,33 @@ class PromotionController extends AbstractController
         if ($this->isCsrfTokenValid('delete'.$promotion->getId(), $request->request->get('_token'))) {
             $promotionRepository->remove($promotion);
         }
+
+        return $this->redirectToRoute('app_promotion_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/import/{nomLong}/{nomCourt}/{tableau}', name: 'app_promotion_import', methods: ['GET'])]
+    public function import(String $nomLong, String $nomCourt, String $tableau, EntityManagerInterface $manager): Response
+    {
+        
+        $etudiants = unserialize($tableau);
+        $promotion = new Promotion();
+        $promotion->setNomCourt($nomCourt);
+        $promotion->setNomLong($nomLong);
+
+        $manager->persist($promotion);
+        $manager->flush();
+
+        for($i = 0; $i < count($etudiants); $i++){
+            $etud =  new Etudiant();
+            $etud.setNom($etudiants[$i]["nom"]);
+            $etud.setPrenom($etudiants[$i]["prenom"]);
+            $etud.setMail($etudiants[$i]["mail"]);
+            $etud.setPromotion($promotion);
+
+            $manager->persist($etud);
+            
+        }
+        $manager->flush();
 
         return $this->redirectToRoute('app_promotion_index', [], Response::HTTP_SEE_OTHER);
     }
