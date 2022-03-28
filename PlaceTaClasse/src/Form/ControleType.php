@@ -16,24 +16,20 @@ class ControleType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('HoraireTTDebut')
-            ->add('HoraireTTFin')
-            ->add('HoraireNonTTDebut')
-            ->add('HoraireNonTTFin')
-            ->add('Date')
-            ->add('Placement')
-            ->add('Surveillant')
-            ->add('Referent', EntityType::class, [
+            ->add('Promotion', EntityType::class, [
                 // looks for choices from this entity
-                'class' => Enseignant::class,
+                'class' => Promotion::class,
             
                 // uses the User.username property as the visible option string
-                'choice_label' => 'nom',
+                'choice_label' => 'nomLong',
             
                 // used to render a select box, check boxes or radios
-                 //'multiple' => true,
-                 //'expanded' => true,
+                'multiple' => true,
+                'expanded' => true,
             ])
+
+            ->add('Date')
+
             ->add('Module', EntityType::class, [
                 // looks for choices from this entity
                 'class' => Module::class,
@@ -45,12 +41,30 @@ class ControleType extends AbstractType
                  //'multiple' => true,
                  //'expanded' => true,
             ])
-            ->add('Promotion', EntityType::class, [
+
+            ->add('HoraireTTDebut')
+            ->add('HoraireTTFin')
+            ->add('HoraireNonTTDebut')
+            ->add('HoraireNonTTFin')
+
+            ->add('Referent', EntityType::class, [
                 // looks for choices from this entity
-                'class' => Promotion::class,
+                'class' => Enseignant::class,
             
                 // uses the User.username property as the visible option string
-                'choice_label' => 'nomLong',
+                'choice_label' => 'nom',
+            
+                // used to render a select box, check boxes or radios
+                 //'multiple' => true,
+                 //'expanded' => true,
+            ])
+
+            ->add('Surveillant', EntityType::class, [
+                // looks for choices from this entity
+                'class' => Enseignant::class,
+            
+                // uses the User.username property as the visible option string
+                'choice_label' => 'nom',
             
                 // used to render a select box, check boxes or radios
                  'multiple' => true,

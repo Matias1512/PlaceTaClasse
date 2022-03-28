@@ -16,10 +16,6 @@ class EtudiantType extends AbstractType
         $builder
             ->add('Nom')
             ->add('Prenom')
-            ->add('Tp')
-            ->add('TierTemps')
-            ->add('Ordinateur')
-            ->add('Mail')
             ->add('Promotion', EntityType::class, [
                 // looks for choices from this entity
                 'class' => Promotion::class,
@@ -31,6 +27,11 @@ class EtudiantType extends AbstractType
                  //'multiple' => true,
                  //'expanded' => true,
             ])
+            ->add('Tp')
+            ->add('TierTemps')
+            ->add('Ordinateur')
+            ->add('Mail')
+            
         ;
     }
 

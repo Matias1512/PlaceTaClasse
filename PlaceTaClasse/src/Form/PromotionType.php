@@ -16,18 +16,8 @@ class PromotionType extends AbstractType
         $builder
             ->add('nomLong')
             ->add('nomCourt')
-            ->add('controles')
-            ->add('modules', EntityType::class, [
-                // looks for choices from this entity
-                'class' => Module::class,
             
-                // uses the User.username property as the visible option string
-                'choice_label' => 'nomLong',
-            
-                // used to render a select box, check boxes or radios
-                 'multiple' => true,
-                 'expanded' => true,
-            ])
+           
         ;
     }
 
