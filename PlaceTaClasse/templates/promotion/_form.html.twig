@@ -1,4 +1,9 @@
 {{ form_start(form) }}
     {{ form_widget(form) }}
+
+    liste d'étudiants(optionnel) : <input type="file" id="upload-csv" accept=".csv">
+
+    
+
     <button class="btn">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}

@@ -5,7 +5,9 @@ namespace App\Form;
 use App\Entity\Promotion;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionResolver\OptionResolver;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+
 
 class PromotionType extends AbstractType
 {
@@ -14,8 +16,9 @@ class PromotionType extends AbstractType
         $builder
             ->add('nomLong')
             ->add('nomCourt')
-            ->add('controles')
-            ->add('modules')
+            
+            //->add('controles')
+            //->add('modules')
         ;
     }
 
