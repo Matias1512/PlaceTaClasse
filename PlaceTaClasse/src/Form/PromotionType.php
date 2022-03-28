@@ -18,6 +18,8 @@ class PromotionType extends AbstractType
         $builder
             ->add('nomLong')
             ->add('nomCourt')
+            
+           
         ;
 
         echo"liste d'étudiants(optionnel) : <input type=\"file\" id=\"upload-csv\" accept=\".csv\" >
@@ -42,7 +44,7 @@ class PromotionType extends AbstractType
     
     </script>";
 
-    
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void
