@@ -78,10 +78,10 @@ class PromotionController extends AbstractController
     }
 
     #[Route('/import/{nomLong}/{nomCourt}/{tableau}', name: 'app_promotion_import', methods: ['GET'])]
-    public function import(String $nomLong, String $nomCourt, String $tableau, EntityManagerInterface $manager): Response
-    {
+    public function import(String $nomLong, String $nomCourt, array $tableau, EntityManagerInterface $manager): Response
+    { 
         
-        $etudiants = unserialize($tableau);
+        $etudiants = (array) $tableau;
         $promotion = new Promotion();
         $promotion->setNomCourt($nomCourt);
         $promotion->setNomLong($nomLong);
@@ -102,5 +102,38 @@ class PromotionController extends AbstractController
         $manager->flush();
 
         return $this->redirectToRoute('app_promotion_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/import/{nomLong}/{nomCourt}', name: 'app_promotion_import_promo', methods: ['GET'])]
+    public function import_promo(String $nomLong, String $nomCourt, EntityManagerInterface $manager): Response
+    { 
+
+        $promotion = new Promotion();
+        $promotion->setNomCourt($nomCourt);
+        $promotion->setNomLong($nomLong);
+
+        $manager->persist($promotion);
+        $manager->flush();
+        return new Response();
+    }
+        
+    #[Route('/import/{nomLong}/{nomCourt}/{nom}/{prenom}/{mail}/{TP}/{TT}/{Ordinateur}', name: 'app_promotion_import_etudiant', methods: ['GET'])]
+    public function import_etudiant(String $nomLong, String $nomCourt, String $nom, String $prenom,int $TP,bool $TT,bool $Ordinateur, String $mail, EntityManagerInterface $manager): Response
+    { 
+
+        $etud =  new Etudiant();
+        $etud->setNom($nom);
+        $etud->setPrenom($prenom);
+        $etud->setMail($mail);
+        $etud->setTp($TP);
+        $etud->setTierTemps($TT);
+        $etud->setOrdinateur($Ordinateur);
+        $RepositoryPromotion = $manager->getRepository(Promotion::class);
+        $RepositoryEtudiant = $manager->getRepository(Etudiant::class);
+        $promotion = $RepositoryPromotion->findBy(array("nomCourt" => $nomCourt, "nomLong" => $nomLong));
+        $etud->setPromotion($promotion[0]);
+        $manager->persist($etud);
+        $manager->flush();
+        return new Response();
     }
 }

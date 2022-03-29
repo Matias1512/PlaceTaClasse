@@ -6,19 +6,55 @@
     
     <script type='text/javascript'>
 
+        function getXMLHttpRequest() {
+            var xhr = null;
+            if (window.XMLHttpRequest || window.ActiveXObject) {
+                if (window.ActiveXObject) {
+                    try {
+                        xhr = new ActiveXObject("Msxml2.XMLHTTP");
+                    } catch(e) {
+                        xhr = new ActiveXObject("Microsoft.XMLHTTP");
+                    }
+                } else {
+                    xhr = new XMLHttpRequest(); 
+                }
+            } else {
+                alert("Votre navigateur ne supporte pas l'objet XMLHTTPRequest...");
+                return null;
+            }
+            return xhr;
+        }
+
+        var xhr = getXMLHttpRequest();
+
+        
+        
+
+
         nomLong = ""
         nomCourt = ""
         let btn_upload = document.getElementById('btn-upload-csv').addEventListener('click', ()=> {
 
             console.log(document.getElementById('upload-csv').value);
+            
+            nomLong = document.getElementById("promotion_nomLong").value;
+            nomCourt = document.getElementById("promotion_nomCourt").value;
+                    
+                    
+            xhr.open("GET","/promotion/import/"+nomLong+"/"+nomCourt,false); //Requête AJAX en mode GET sur l'url donnée.
+            xhr.send(null);
             Papa.parse(document.getElementById('upload-csv').files[0], {
                 download: true,
                 header: true,
                 complete: function(results) {
-                    console.log(results);
-                    nomLong = document.getElementById("promotion_nomLong").value;
-                    nomCourt = document.getElementById("promotion_nomCourt").value;
-                    document.location.href="/promotion/import/"+nomLong+"/"+nomCourt+"/"+results; 
+                    results.data.map((data, index)=> {
+					console.log(data);
+                    
+                    xhr.open("GET","/promotion/import/"+nomLong+"/"+nomCourt+"/"+data["Nom"]+"/"+data["Prenom"]+"/"+data["Mail"]+"/"+data["TP"]+"/"+data["TT"]+"/"+data["Ordinateur"],false); //Requête AJAX en mode GET sur l'url donnée.
+                    xhr.send(null);
+                    
+					});
+                    
                 }
             })
         });
@@ -26,7 +62,7 @@
 
 
         
-        </script>
+    </script>
 
     <!--<button class="btn">{ button_label|default('Save') }}</button>
     -->
