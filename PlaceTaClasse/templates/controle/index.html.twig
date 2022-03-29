@@ -18,7 +18,7 @@
                             <a class="nav-link active" aria-current="page" href="{{ path('app_controle_new') }}">Ajouter</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{{ path('app_controle_nettoyer') }}">Nettoyer</a>
+                            <a class="nav-link active" aria-current="page" href="">Nettoyer</a>
                         </li>
                     </ul>
                 </div>
@@ -42,7 +42,9 @@
                 <th>HoraireNonTTDebut</th>
                 <th>HoraireNonTTFin</th>
                 <th>Date</th>
-                <th>actions</th>
+                <th>Plan de placement</th>
+                <th>Actions</th>
+
             </tr>
         </thead>
         <tbody>
@@ -55,7 +57,11 @@
                 <td>{{ controle.HoraireNonTTFin }}</td>
                 <td>{{ controle.Date ? controle.Date|date('Y-m-d') : '' }}</td>
                 <td>
-                    <a href="{{ path('app_controle_show', {'id': controle.id}) }}">show</a>
+                    <a href="{{ path('app_controle_sameTime', { 'id': controle.id }) }}">Générer</a>
+                    <a href="">Télécharger</a>
+                </td>
+                <td>
+                    <a href="{{ path('app_controle_show', {'id': controle.id}) }}">Afficher</a>
                     <a href="{{ path('app_controle_edit', {'id': controle.id}) }}">edit</a>
                 </td>
             </tr>

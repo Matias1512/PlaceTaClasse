@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Plan de placement{% endblock %}
+
+{% block body %}
+
+    <table id="tableau" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Id</th>
+                <th>HoraireTTDebut</th>
+                <th>HoraireTTFin</th>
+                <th>HoraireNonTTDebut</th>
+                <th>HoraireNonTTFin</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+        <form id="form" method="POST">
+        {% for controle in tabControleSD %}
+            <tr>
+                <td><input type="checkbox" id="scales" value= '{{ controle.id }}' ></td>
+                <td>{{ controle.id }}</td>
+                <td>{{ controle.HoraireTTDebut }}</td>
+                <td>{{ controle.HoraireTTFin }}</td>
+                <td>{{ controle.HoraireNonTTDebut }}</td>
+                <td>{{ controle.HoraireNonTTFin }}</td>
+                <td>{{ controle.Date ? controle.Date|date('Y-m-d') : '' }}</td>
+            </tr>
+        {% else %}
+        <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+{% endblock %}

@@ -73,4 +73,14 @@ class ControleRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function findControleSameTime($date): ?Controle
+    {
+            return $this->createQueryBuilder('c')
+            ->andWhere('c.Date = :val1')
+            ->setParameter('val1', $date)
+            ->getQuery()
+            ->getOneOrNullResult()
+            ;
+        }
 }

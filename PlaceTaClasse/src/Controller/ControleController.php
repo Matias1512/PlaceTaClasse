@@ -73,9 +73,37 @@ class ControleController extends AbstractController
 
         return $this->redirectToRoute('app_controle_index', [], Response::HTTP_SEE_OTHER);
     }
-    #[Route('/nettoyer', name: 'app_controle_nettoyer')]
-    public function nettoyer()
+    #[Route('/sameTime', name: 'app_controle_sameTime', methods: ['GET'])]
+    public function sameTime(Request $request, Controle $controle, ControleRepository $controleRepository): Response
     {
+        $tabControleSD = array(); //tab controle en meme temps
+        $controlesSD = $controleRepository->findControleSameDate($controle->Date);
         
+        $heure = $controle->HoraireTTDebut;
+        $heures = explode(":", $heure);
+        $heure = intval($heures[0]);
+
+        if($heure >= 8 && $heure <= 12){
+            foreach($controlesSD as $c){
+                $heure = $c->HoraireTTDebut;
+                $heures = explode(":", $heure);
+                $heure = intval($heures[0]);
+                if($heure >= 8 && $heure <= 12){
+                    array_push($tabControleSD, $c);
+                }
+            }
+        }
+        else{
+            foreach($controlesSD as $c){
+                $heure = $c->HoraireTTDebut;
+                $heures = explode(":", $heure);
+                $heure = intval($heures[0]);
+                if($heure >= 14){
+                    array_push($tabControleSD, $c);
+                }
+            }
+        }
+        return $this->render('planDePlacement/controleSameTime.html.twig', ['tabControleSD'=>$tabControleSD]);
     }
 }
+
