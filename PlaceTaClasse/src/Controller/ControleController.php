@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Controle;
 use App\Entity\Salle;
+
+use App\Entity\Place;
 use App\Entity\Promotion;
 use App\Form\ControleType;
 use App\Repository\ControleRepository;
@@ -26,7 +28,7 @@ use Doctrine\ORM\EntityManagerInterface;
 
 use App\Entity\Enseignant;
 use App\Entity\Module;
-
+use App\Entity\Placement;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\Length;
 
@@ -154,7 +156,7 @@ class ControleController extends AbstractController
                 $nbPlaceDispo += $salle->getNbPlace();
             }
             
-            //Séparer les triso des normaux
+            //Séparer les TT des nons TT
 
             $tabEtudNonTT = [];
             $tabEtudTT = [];
@@ -170,12 +172,89 @@ class ControleController extends AbstractController
                     array_push($tabEtudNonTT, $etudiant);
                 }
             }
+
+            //Déterminer s'il y a assez de place
+                
+            $nbOrdinateur =0;
+            if($nbPlaceDispo<$nbEtudiants)
+            {
+                exit("Il n'y a pas assez de place disponible");
+            }
+            else
+            {
+                foreach($tabEtudTT as $etudiant)
+                {
+                    if($etudiant->getOrdinateur()==true)
+                    {
+                        $nbOrdinateur = $nbOrdinateur +1;
+                    }
+                }
+
+
+            }
             
+            
+            //Choisir la salle qui accueil les tiers temps
+            
+            $numSalleTT= 1;
+            foreach($tabSalles as $salle)
+            {
+                $tabPrise= explode(',', $salle->getEmplacementPrise);
+                $nbPrise = count($tabPrise);
+                if($nbOrdinateur < $nbPrise)
+                {
+                    $numSalleTT = $salle->getId();   
+                    break;
+                }
+            
+            }
+
+            //Placer les étudiants
+
+            //Placer les TT et Ordinateurs
+            $tabPlaceOccupee= [];
+            $parcoursTabPrise=0;
+            $parcoursSalle =0;
+            $salle = $SalleRepository->find($numSalleTT);
+
+            foreach($tabEtudTT as $etudiant)
+            {
+                $placement = new Placement();
+                if($etudiant->getOrdinatuer == true)
+                {
+                    //Placer les TT avec Ordinateur
+                    $place= $salle->getPlaces()[$tabPrise[$parcoursTabPrise]-1];
+                    $placement->setPlace($place);
+                    $parcoursTabPrise ++;
+                    array_push($tabPlaceOccupee, $place);
+
+                }
+                else{
+
+                    $place= $salle->getPlaces()[$parcoursSalle];
+                    while(in_array($place, $tabPlaceOccupee))
+                    {
+                        $parcoursSalle++ ;
+                        $place= $salle->getPlaces()[$parcoursSalle];
+                    }
+                    $placement->setPlace($place);
+                    $parcoursSalle ++ ;
+                    array_push($tabPlaceOccupee, $place);
+                }
+
+                    $placement->setEtudiant($etudiant);
+                    
+                    $placement->addControle($controle);
+            }
+
+            //Placer les non TT
+
+            foreach($tabSalles as $salle)
 
 
 
 
-            return $this->render('test.html.twig', ['data'=>$tabSalles, 'controleId'=>$controle->getId(), 'nb'=>$nbPlaceDispo, 'TabNonTT'=>$tabEtudNonTT]);
+            return $this->render('test.html.twig', ['data'=>$tabSalles, 'controleId'=>$controle->getId(), 'nb'=>$nbPlaceDispo, 'TabNonTT'=>$tabEtudNonTT, 'nbOrdi'=>$nbOrdinateur]);
 
 
             

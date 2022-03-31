@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Place;
 use App\Entity\Salle;
 use App\Form\SalleType;
+use App\Repository\PlaceRepository;
 use App\Repository\SalleRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,14 +24,36 @@ class SalleController extends AbstractController
     }
 
     #[Route('/new', name: 'app_salle_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, SalleRepository $salleRepository): Response
+    public function new(Request $request, SalleRepository $salleRepository,PlaceRepository $PlaceRepository): Response
     {
         $salle = new Salle();
         $form = $this->createForm(SalleType::class, $salle);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+
             $salleRepository->add($salle);
+            $tabPrise = explode(',', $salle->getEmplacementPrise());
+
+            for($i =1;$i<$salle->getNbPlace()+1;$i++)
+            {
+                $place =new Place();
+                if(in_array(strval($i),$tabPrise)== true)
+                {
+                    $place->setPrise(true);
+                }
+
+                else{
+                    $place->setPrise(false);
+                }
+                $place->setNumero($i);
+                $place->setSalle($salle);
+                $PlaceRepository->add($place);
+
+            }
+
+
             return $this->redirectToRoute('app_salle_index', [], Response::HTTP_SEE_OTHER);
         }
 

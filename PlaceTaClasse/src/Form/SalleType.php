@@ -15,6 +15,7 @@ class SalleType extends AbstractType
             ->add('Nom')
             ->add('NbPlace')
             ->add('emplacementPrise')
+            ->add('Amphi')
             ->add('Plan')
             
             
