@@ -40,14 +40,15 @@ class testPDF extends AbstractController
         // (Optional) Setup the paper size and orientation
         $dompdf->setPaper(array(0,0,850,1600), 'landscape');
             
-        // Render the HTML as PDF
+        // Render the HTML as PDF 
         $dompdf->render();
             
         // Output the generated PDF to Browser
-        $dompdf->stream("planDePlacement.pdf");
+        $dompdf->stream("planDePlacement.pdf", ["Attachement" => true]);
+        
+        exit(0);
         
         
-        return $this->render('testPDF.html');
 
     }
 }
