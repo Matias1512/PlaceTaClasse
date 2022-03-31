@@ -58,7 +58,7 @@
                 <td>{{ controle.Date ? controle.Date|date('Y-m-d') : '' }}</td>
                 <td>
                     <a href="{{ path('app_controle_recupSalle', { 'id': controle.id }) }}">Générer</a>
-                    <a href="">Télécharger</a>
+                    <a href="{{ path('testPDF') }}">Télécharger</a>
                 </td>
                 <td>
                     <a href="{{ path('app_controle_show', {'id': controle.id}) }}">Afficher</a>

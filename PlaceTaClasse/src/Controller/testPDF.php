@@ -35,12 +35,12 @@ class testPDF extends AbstractController
             
         // instantiate and use the dompdf class
         $dompdf = new Dompdf();
-        $dompdf->loadHtml(file_get_contents('../templates/testPDF.html'));
+        $dompdf->loadHtml('test');
             
         // (Optional) Setup the paper size and orientation
         $dompdf->setPaper(array(0,0,850,1600), 'landscape');
             
-        // Render the HTML as PDF
+        // Render the HTML as PDF 
         $dompdf->render();
             
         // Output the generated PDF to Browser
