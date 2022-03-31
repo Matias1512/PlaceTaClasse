@@ -28,31 +28,26 @@ class testPDF extends AbstractController
     /**
      * @Route("/testPDF", name="testPDF")
      */
-
     public function index()
     {
-        // Configure Dompdf according to your needs
-        $pdfOptions = new Options();
-        $pdfOptions->set('defaultFont', 'Arial');
         
-        // Instantiate Dompdf with our options
-        $dompdf = new Dompdf($pdfOptions);
-        
-        // Retrieve the HTML generated in our twig file
-        $html = $this->renderView('testPDF.html.twig');
-        
-        // Load HTML to Dompdf
-        $dompdf->loadHtml($html);
-        
-        // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
-        $dompdf->setPaper('A4', 'portrait');
-
+        require_once 'dompdf_1-2-1/dompdf/autoload.inc.php';
+            
+        // instantiate and use the dompdf class
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml(file_get_contents('../templates/testPDF.html'));
+            
+        // (Optional) Setup the paper size and orientation
+        $dompdf->setPaper(array(0,0,850,1600), 'landscape');
+            
         // Render the HTML as PDF
         $dompdf->render();
+            
+        // Output the generated PDF to Browser
+        $dompdf->stream("planDePlacement.pdf");
+        
+        
+        return $this->render('testPDF.html');
 
-         // Output the generated PDF to Browser (inline view)
-        $dompdf->stream("testPDF.pdf", [
-            "Attachment" => false
-        ]);
     }
 }
