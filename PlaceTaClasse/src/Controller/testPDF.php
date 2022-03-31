@@ -35,7 +35,7 @@ class testPDF extends AbstractController
             
         // instantiate and use the dompdf class
         $dompdf = new Dompdf();
-        $dompdf->loadHtml('test');
+        $dompdf->loadHtml(file_get_contents('../templates/testPDF.html'));
             
         // (Optional) Setup the paper size and orientation
         $dompdf->setPaper(array(0,0,850,1600), 'landscape');
@@ -44,10 +44,11 @@ class testPDF extends AbstractController
         $dompdf->render();
             
         // Output the generated PDF to Browser
-        $dompdf->stream("planDePlacement.pdf");
+        $dompdf->stream("planDePlacement.pdf", ["Attachement" => true]);
+        
+        exit(0);
         
         
-        return $this->render('testPDF.html');
 
     }
 }
