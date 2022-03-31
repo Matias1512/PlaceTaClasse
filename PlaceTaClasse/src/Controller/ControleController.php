@@ -3,12 +3,32 @@
 namespace App\Controller;
 
 use App\Entity\Controle;
+use App\Entity\Salle;
+use App\Entity\Promotion;
 use App\Form\ControleType;
 use App\Repository\ControleRepository;
+use App\Repository\PromotionRepository;
+use App\Repository\SalleRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
+
+use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Doctrine\ORM\EntityManagerInterface;
+
+
+
+use App\Entity\Enseignant;
+use App\Entity\Module;
+
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Validator\Constraints\Length;
 
 #[Route('/controle')]
 class ControleController extends AbstractController
@@ -105,5 +125,72 @@ class ControleController extends AbstractController
         }
         return $this->render('planDePlacement/controleSameTime.html.twig', ['tabControleSD'=>$tabControleSD]);
     }
-}
+
+    #[Route('/{id}/recupSalle', name: 'app_controle_recupSalle', methods: ['GET', 'POST'])]
+    public function recupSalle(Request $request, Controle $controle, PromotionRepository $PromotionRepository, SalleRepository $SalleRepository, ControleRepository $ControleRepository ): Response
+    {
+        $defaultData = [];
+        $form = $this->createFormBuilder($defaultData)
+                        ->add('Salle', EntityType::class, ['class' => Salle::class, 'choice_label' => 'nom', 'multiple' => true,'expanded' => true,])
+                        ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // data is an array with "name", "email", and "message" keys
+            
+            //Initialisation 
+            $data = $form->getData();
+            $tabSalles = $data['Salle'];
+
+            $promotion = $controle->getPromotion()[0];
+
+            $cptEtudPlace = 0;
+            $cptPlaceAttribuee =0;
+            $nbEtudiants= count($promotion->getEtudiants());
+            $nbPlaceDispo =0;
+            foreach($tabSalles as $salle )
+            {
+                $nbPlaceDispo += $salle->getNbPlace();
+            }
+            
+            //Séparer les triso des normaux
+
+            $tabEtudNonTT = [];
+            $tabEtudTT = [];
+
+            foreach($promotion->getEtudiants() as $etudiant)
+            {
+                if($etudiant->getTierTemps() == true)
+                {
+                    array_push($tabEtudTT,$etudiant);
+                }
+                else
+                {
+                    array_push($tabEtudNonTT, $etudiant);
+                }
+            }
+            
+
+
+
+
+            return $this->render('test.html.twig', ['data'=>$tabSalles, 'controleId'=>$controle->getId(), 'nb'=>$nbPlaceDispo, 'TabNonTT'=>$tabEtudNonTT]);
+
+
+            
+
+        }
+
+        // ... render the form
+        return $this->render('planDePlacement/controleSameTime.html.twig', [
+            'form'=>$form->createView()
+        ]);
+    }
+    
+    
+
+
+    }
+
 

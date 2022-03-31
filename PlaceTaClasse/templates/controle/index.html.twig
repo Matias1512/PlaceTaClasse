@@ -57,7 +57,7 @@
                 <td>{{ controle.HoraireNonTTFin }}</td>
                 <td>{{ controle.Date ? controle.Date|date('Y-m-d') : '' }}</td>
                 <td>
-                    <a href="{{ path('app_controle_sameTime', { 'id': controle.id }) }}">Générer</a>
+                    <a href="{{ path('app_controle_recupSalle', { 'id': controle.id }) }}">Générer</a>
                     <a href="">Télécharger</a>
                 </td>
                 <td>
