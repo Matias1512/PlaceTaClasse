@@ -56,9 +56,10 @@
                 <td>{{ controle.HoraireNonTTDebut }}</td>
                 <td>{{ controle.HoraireNonTTFin }}</td>
                 <td>{{ controle.Date ? controle.Date|date('Y-m-d') : '' }}</td>
+                <input  name="placement" type="hidden" value="{{ controle.Placement| length }}"/>
                 <td>
                     <a href="{{ path('app_controle_recupSalle', { 'id': controle.id }) }}">Générer</a>
-                    <a href="{{ path('testPDF') }}">Télécharger</a>
+                    <a name="telecharger" href="{{ path('testPDF') }}">Télécharger</a>
                 </td>
                 <td>
                     <a href="{{ path('app_controle_show', {'id': controle.id}) }}">Afficher</a>
@@ -78,6 +79,13 @@
         </script>
         </tbody>
     </table>
-    <a href="{{ path('app_controle_new') }}">Create new</a>
-    <a href="{{ path('testPDF') }}">Create PDF</a>
+    <script>
+    for(i=document.getElementsByName("placement").length - 1;i>-1;i--)
+    {
+        if(document.getElementsByName("placement")[i].value == 0)
+        {
+            document.getElementsByName("telecharger")[i].parentNode.removeChild(document.getElementsByName("telecharger")[i]);
+        }
+    }
+    </script>
 {% endblock %}
