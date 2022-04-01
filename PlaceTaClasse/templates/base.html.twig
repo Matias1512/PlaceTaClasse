@@ -75,14 +75,21 @@
 
                 <div class="col-2 offset-1">
                     <ul class="nav justify-content-end">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/compte">Compte</a>
-                        </li>
+                        {% if is_granted('IS_AUTHENTICATED_FULLY')%}
+                            <li class="nav-item">
+                                <a class="nav-link" href="/logout">Se déconnecter</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="/inscription">S'inscrire</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/login">Se connecter</a>
+                            </li>
+                        {% endif %}
                     </ul>
                 </div>
-
             </div>
-
         {% endblock %}
         <script type="text/javascript">
                 $(document).ready( function () {
