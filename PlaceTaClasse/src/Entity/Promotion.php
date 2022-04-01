@@ -19,7 +19,7 @@ class Promotion
     private $nomLong;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $nomCourt;
+    public $nomCourt;
 
     #[ORM\ManyToMany(targetEntity: Controle::class, mappedBy: 'Promotion')]
     private $controles;
@@ -54,7 +54,7 @@ class Promotion
         return $this;
     }
 
-    public function getNomCourt(): ?string
+    public function getnomCourt(): ?string
     {
         return $this->nomCourt;
     }

@@ -36,26 +36,25 @@
     <table id="tableau" class="display" style="width:100%">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>HoraireTTDebut</th>
-                <th>HoraireTTFin</th>
-                <th>HoraireNonTTDebut</th>
-                <th>HoraireNonTTFin</th>
+                <th>Module</th>
+                <th>Promotion</th>
                 <th>Date</th>
+                <th>Horaire</th>
+                <th>Enseignant referant</th>
+                <th>Enseignant surveillant</th>
                 <th>Plan de placement</th>
                 <th>Actions</th>
-
             </tr>
         </thead>
         <tbody>
         {% for controle in controles %}
             <tr>
-                <td>{{ controle.id }}</td>
-                <td>{{ controle.HoraireTTDebut }}</td>
-                <td>{{ controle.HoraireTTFin }}</td>
-                <td>{{ controle.HoraireNonTTDebut }}</td>
-                <td>{{ controle.HoraireNonTTFin }}</td>
+                <td>{{ controle.Module.nomCourt }}</td>
+                <td>{% for promo in controle.Promotion %}{{ promo.nomCourt }}{% endfor %}</td>
                 <td>{{ controle.Date ? controle.Date|date('Y-m-d') : '' }}</td>
+                <td>{{ controle.HoraireTTDebut }}-{{ controle.HoraireTTFin }} ({{ controle.HoraireNonTTDebut }}-{{ controle.HoraireNonTTFin }} TT)</td>
+                <td>{{ controle.Referent.Nom }} {{ controle.Referent.Prenom }}</td>
+                <td></td>
                 <input  name="placement" type="hidden" value="{{ controle.Placement| length }}"/>
                 <td>
                     <a href="{{ path('app_controle_recupSalle', { 'id': controle.id }) }}">Générer</a>

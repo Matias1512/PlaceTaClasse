@@ -284,15 +284,7 @@ class ControleController extends AbstractController
                     }
                 }   
             }
-            $placements = $PlacementRepository->findAll();
-            return $this->render('test.html.twig', ['data'=>$tabSalles, 
-                                    'controleId'=>$controle->getId(), 
-                                    'nb'=>$nbPlaceDispo, 
-                                    'TabNonTT'=>$tabEtudNonTT,
-                                    'TabTT'=>$tabEtudTT, 
-                                    'nbOrdi'=>$nbOrdinateur,
-                                    'placements'=>$placements],
-                                    );
+            return $this->redirectToRoute('app_controle_index', [], Response::HTTP_SEE_OTHER);
         }
 
         // ... render the form
