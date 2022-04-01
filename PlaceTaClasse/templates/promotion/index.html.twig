@@ -3,41 +3,52 @@
 {% block title %}Promotion index{% endblock %}
 
 {% block body %}
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.4/datatables.min.css"/>
+    <script 
+        src="https://code.jquery.com/jquery-3.6.0.min.js" 
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" 
+        crossorigin="anonymous">
+    </script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.4/datatables.min.js"></script>
+
     <div class="row">
                 <div class="col-3">
                     <ul class="nav justify-content-start">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{{ path('app_promotion_new') }}">Ajouter</a>
+                            <a class="nav-link active" aria-current="page" href="{{ path('app_controle_new') }}">Ajouter</a>
                         </li>
-                        <!--<li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{ path('app_promotion_importer') }}">Importer</a>
-                        </li>-->
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="">Nettoyer</a>
+                        </li>
                     </ul>
                 </div>
                 <div class="col-5 offset-1">
                     <ul class="nav justify-content-left">
                         <li class="nav-item">
-                            <h1>Promotion index</h1>
+                            <h1>Liste des Promotions</h1>
                         </li>
                     </ul>
                 </div>
             </div>
+    
+    <h1>Promotion index</h1>
 
-    <table class="table">
+    <table id="tableau" class="display" style="width:100%">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>NomLong</th>
                 <th>NomCourt</th>
+                <th>NomLong</th>
+                <th>Nb Etudiants</th>
                 <th>actions</th>
             </tr>
         </thead>
         <tbody>
         {% for promotion in promotions %}
             <tr>
-                <td>{{ promotion.id }}</td>
-                <td>{{ promotion.nomLong }}</td>
                 <td>{{ promotion.nomCourt }}</td>
+                <td>{{ promotion.nomLong }}</td>
+                <td>{{ promotion.etudiants|length }}</td>
+
                 <td>
                     <a href="{{ path('app_promotion_show', {'id': promotion.id}) }}">show</a>
                     <a href="{{ path('app_promotion_edit', {'id': promotion.id}) }}">edit</a>

@@ -50,7 +50,7 @@
         {% for controle in controles %}
             <tr>
                 <td>{{ controle.Module.nomCourt }}</td>
-                <td>{% for promo in controle.Promotion %}{{ promo.nomCourt }}{% endfor %}</td>
+                <td>{% for promo in controle.Promotion %}{{ promo.nomCourt }} {% endfor %}</td>
                 <td>{{ controle.Date ? controle.Date|date('Y-m-d') : '' }}</td>
                 <td>{{ controle.HoraireTTDebut }}-{{ controle.HoraireTTFin }} ({{ controle.HoraireNonTTDebut }}-{{ controle.HoraireNonTTFin }} TT)</td>
                 <td>{{ controle.Referent.Nom }} {{ controle.Referent.Prenom }}</td>

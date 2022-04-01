@@ -19,6 +19,7 @@ class PromotionController extends AbstractController
     #[Route('/', name: 'app_promotion_index', methods: ['GET'])]
     public function index(PromotionRepository $promotionRepository): Response
     {
+    
         return $this->render('promotion/index.html.twig', [
             'promotions' => $promotionRepository->findAll(),
         ]);
