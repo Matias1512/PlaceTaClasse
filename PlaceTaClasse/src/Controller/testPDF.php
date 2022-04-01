@@ -38,7 +38,7 @@ class testPDF extends AbstractController
         $dompdf->loadHtml(file_get_contents('../templates/testPDF.html'));
             
         // (Optional) Setup the paper size and orientation
-        $dompdf->setPaper(array(0,0,850,1600), 'landscape');
+        $dompdf->setPaper("a4", 'landscape');
             
         // Render the HTML as PDF 
         $dompdf->render();
