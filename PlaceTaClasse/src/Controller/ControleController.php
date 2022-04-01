@@ -11,6 +11,7 @@ use App\Form\ControleType;
 use App\Repository\ControleRepository;
 use App\Repository\PromotionRepository;
 use App\Repository\SalleRepository;
+use App\Repository\PlacementRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -129,7 +130,7 @@ class ControleController extends AbstractController
     }
 
     #[Route('/{id}/recupSalle', name: 'app_controle_recupSalle', methods: ['GET', 'POST'])]
-    public function recupSalle(Request $request, Controle $controle, PromotionRepository $PromotionRepository, SalleRepository $SalleRepository, ControleRepository $ControleRepository ): Response
+    public function recupSalle(Request $request, Controle $controle, PromotionRepository $PromotionRepository, SalleRepository $SalleRepository, ControleRepository $ControleRepository, PlacementRepository $PlacementRepository, EntityManagerInterface $manager): Response
     {
         $defaultData = [];
         $form = $this->createFormBuilder($defaultData)
@@ -199,7 +200,7 @@ class ControleController extends AbstractController
             $numSalleTT= 1;
             foreach($tabSalles as $salle)
             {
-                $tabPrise= explode(',', $salle->getEmplacementPrise);
+                $tabPrise= explode(',', $salle->getEmplacementPrise());
                 $nbPrise = count($tabPrise);
                 if($nbOrdinateur < $nbPrise)
                 {
@@ -220,7 +221,7 @@ class ControleController extends AbstractController
             foreach($tabEtudTT as $etudiant)
             {
                 $placement = new Placement();
-                if($etudiant->getOrdinatuer == true)
+                if($etudiant->getOrdinateur() == true)
                 {
                     //Placer les TT avec Ordinateur
                     $place= $salle->getPlaces()[$tabPrise[$parcoursTabPrise]-1];
@@ -243,22 +244,55 @@ class ControleController extends AbstractController
                 }
 
                     $placement->setEtudiant($etudiant);
-                    
                     $placement->addControle($controle);
+                    $PlacementRepository->add($placement);
             }
 
             //Placer les non TT
-
+            $cptEtudPlace = 0;
             foreach($tabSalles as $salle)
-
-
-
-
-            return $this->render('test.html.twig', ['data'=>$tabSalles, 'controleId'=>$controle->getId(), 'nb'=>$nbPlaceDispo, 'TabNonTT'=>$tabEtudNonTT, 'nbOrdi'=>$nbOrdinateur]);
-
-
-            
-
+            {
+                //vérifier si la salle est la même que celle des TT
+                if($salle->getId() == $numSalleTT){
+                    $places = $salle->getPlaces();
+                    foreach($places as $place)
+                    {
+                        if($cptEtudPlace < count($tabEtudNonTT)){
+                            //vérifier si la place n'est pas déjà occuper
+                            if(!(in_array($place, $tabPlaceOccupee))){
+                                $placement = new Placement();
+                                $placement->setEtudiant($tabEtudNonTT[$cptEtudPlace]);
+                                $placement->setPlace($place);
+                                $placement->addControle($controle);
+                                $cptEtudPlace++;
+                                $PlacementRepository->add($placement);
+                            }
+                        }
+                    }
+                }
+                else{
+                    $places = $salle->getPlaces();
+                    foreach($places as $place){
+                        if($cptEtudPlace < count($tabEtudNonTT)){
+                            $placement = new Placement();
+                            $placement->setEtudiant($tabEtudNonTT[$cptEtudPlace]);
+                            $placement->setPlace($place);
+                            $placement->addControle($controle);
+                            $cptEtudPlace++;
+                            $PlacementRepository->add($placement);
+                        }
+                    }
+                }   
+            }
+            $placements = $PlacementRepository->findAll();
+            return $this->render('test.html.twig', ['data'=>$tabSalles, 
+                                    'controleId'=>$controle->getId(), 
+                                    'nb'=>$nbPlaceDispo, 
+                                    'TabNonTT'=>$tabEtudNonTT,
+                                    'TabTT'=>$tabEtudTT, 
+                                    'nbOrdi'=>$nbOrdinateur,
+                                    'placements'=>$placements],
+                                    );
         }
 
         // ... render the form
