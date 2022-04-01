@@ -10,6 +10,13 @@
 {% for etudiant in TabNonTT %}
 <p> {{etudiant.nom}}</p>
 {% endfor %}
+{% for etudiant in TabTT %}
+<p> {{etudiant.nom}}</p>
+{% endfor %}
+
+{% for placement in placements %}
+<p> {{placement.etudiant}}</p>
+{% endfor %}
 </div>
     
 {% endblock %}
