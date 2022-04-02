@@ -42,14 +42,20 @@ class PlanDePlacementController extends AbstractController
 
         //écriture du fichier testPDF.html
         $contenu="<h1>BUT INFORMATIQUE</h1>";
+
+        //pour chaque salle
         for ($i = 0; $i < count($salles);  $i++){
             $contenu .= '<h2>'.$salles[$i][0]->getNom().'</h2>';
             $contenu .= '<img src="'.$salles[$i][0]->getPlan().'" alt="image de la salle"><BR>';
+
+            //nom de la ou les promotion(s)
             $contenu .= $controle->getPromotion()->toArray()[0]->getNomLong();
             for($j = 1; $j < count($controle->getPromotion()->toArray());  $j++){
                 $contenu .= '/';
                 $contenu .= $controle->getPromotion()->toArray()[$j]->getNomLong();
             }
+
+            //tableau des placement
             $contenu .= '<BR>Les  étudiants  devront  occuper  les  places  indiquées  sur  le  plan  ci-dessus,  conformément  au numéro qui leur a été affecté sur le planning général d’occupation des salles.';
             $contenu .= '<table>';
             $contenu .= '<tr>';
@@ -59,6 +65,22 @@ class PlanDePlacementController extends AbstractController
             $contenu .=  '<th>Tiers-Temps</th>';
             $contenu .=  '<th>Ordinateur</th>';
             $contenu .= '</tr>';
+
+            //premier placement
+            $contenu .= '<tr>';
+            $contenu .=  '<td>'.$places[0][0]->getNumero().'</td>';
+            $contenu .=  '<td>'.$placement[0]->getEtudiant()->getNom().'</td>';
+            $contenu .=  '<td>'.$placement[0]->getEtudiant()->getPrenom().'</td>';
+            if ($placement[0]->getEtudiant()->getTierTemps()){
+                $contenu .=  '<td>Tiers-Temps</td>';
+                if ($placement[0]->getEtudiant()->getOrdinateur()){
+                    $contenu .=  '<td>Ordinateur</td>';
+                }
+            }
+                
+            $contenu .= '</tr>';
+
+            //reste du placement
             for($j = 1; $j < count($placement); $j++){
                 $contenu .= '<tr>';
                 $contenu .=  '<td>'.$places[$j]->getNumero().'</td>';
@@ -67,7 +89,7 @@ class PlanDePlacementController extends AbstractController
                 if ($placement[$j]->getEtudiant()->getTierTemps()){
                     $contenu .=  '<td>Tiers-Temps</td>';
                     if ($placement[$j]->getEtudiant()->getOrdinateur()){
-                        $contenu .=  '<td>Ordinateur</td>';
+                        $contenu .=  '<td>+ Ordinateur</td>';
                     }
                 }
                 
