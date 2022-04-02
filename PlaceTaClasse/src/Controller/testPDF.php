@@ -26,9 +26,9 @@ use Dompdf\Options;
 class testPDF extends AbstractController
 {
     /**
-     * @Route("/testPDF", name="testPDF")
+     * @Route("/testPDF/{nomFic}", name="testPDF")
      */
-    public function index()
+    public function index(String $nomFic)
     {
         
         require_once 'dompdf_1-2-1/dompdf/autoload.inc.php';
@@ -44,7 +44,7 @@ class testPDF extends AbstractController
         $dompdf->render();
             
         // Output the generated PDF to Browser
-        $dompdf->stream("planDePlacement.pdf", ["Attachement" => true]);
+        $dompdf->stream($nomFic, ["Attachement" => true]);
         
         exit(0);
         

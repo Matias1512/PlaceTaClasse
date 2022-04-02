@@ -41,12 +41,21 @@ class PlanDePlacementController extends AbstractController
         }
 
         //écriture du fichier testPDF.html
-        $contenu="<h1>BUT INFORMATIQUE</h1>";
+        $contenu = '<style>.page { width: 95%; height: 95%; }</style>
+                    ';
+        
 
         //pour chaque salle
         for ($i = 0; $i < count($salles);  $i++){
+            $contenu .= '<div class="page">';
+            $contenu .="<h1>BUT INFORMATIQUE</h1>";
             $contenu .= '<h2>'.$salles[$i][0]->getNom().'</h2>';
-            $contenu .= '<img src="'.$salles[$i][0]->getPlan().'" alt="image de la salle"><BR>';
+            
+            $path = $salles[$i][0]->getPlan();
+            $type = pathinfo($path, PATHINFO_EXTENSION);
+            $data = file_get_contents($path);
+            $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+            $contenu .= '<img src="'.$base64.'" alt="image de la salle" width="500" height="400"><BR>';
 
             //nom de la ou les promotion(s)
             $contenu .= $controle->getPromotion()->toArray()[0]->getNomLong();
@@ -97,12 +106,13 @@ class PlanDePlacementController extends AbstractController
             }
             
             $contenu .= '</table>';
+            $contenu .= '</div>';
         }
         
         file_put_contents('../templates/testPDF.html', $contenu);
 
         //téléchargement du fichier au format pdf
-        return $this->redirectToRoute('testPDF');
+        return $this->redirectToRoute('testPDF',["nomFic" => "planDePlacemnt.pdf"]);
     }
 }
 

@@ -58,7 +58,8 @@
                 <input  name="placement" type="hidden" value="{{ controle.Placement| length }}"/>
                 <td>
                     <a href="{{ path('app_controle_recupSalle', { 'id': controle.id }) }}">Générer</a>
-                    <a name="telecharger" href="{{ path('app_plandeplacement_telecharger', { 'id': controle.id }) }}">Télécharger</a>
+                    <a name="telechargerPlan" href="{{ path('app_plandeplacement_telecharger', { 'id': controle.id }) }}">Télécharger plan</a>
+                    <a name="telechargerFeuille" href="{{ path('app_feuilleEmargement_telecharger', { 'id': controle.id }) }}">Télécharger émargement</a>
                 </td>
                 <td>
                     <a href="{{ path('app_controle_show', {'id': controle.id}) }}">Afficher</a>
@@ -83,7 +84,9 @@
     {
         if(document.getElementsByName("placement")[i].value == 0)
         {
-            document.getElementsByName("telecharger")[i].parentNode.removeChild(document.getElementsByName("telecharger")[i]);
+            document.getElementsByName("telechargerPlan")[i].parentNode.removeChild(document.getElementsByName("telechargerPlan")[i]);
+            document.getElementsByName("telechargerFeuille")[i].parentNode.removeChild(document.getElementsByName("telechargerFeuille")[i]);
+
         }
     }
     </script>
