@@ -6,6 +6,7 @@ use App\Entity\Salle;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class SalleType extends AbstractType
 {
@@ -16,7 +17,9 @@ class SalleType extends AbstractType
             ->add('NbPlace')
             ->add('emplacementPrise')
             ->add('Amphi')
-            ->add('Plan')
+            ->add('imagePlan', FileType::class, [
+                'mapped' => false
+            ]);
             
             
         ;

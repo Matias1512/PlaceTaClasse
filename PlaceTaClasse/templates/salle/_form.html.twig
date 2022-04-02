@@ -1,4 +1,9 @@
 {{ form_start(form) }}
+    {{ form_row(form.Nom) }}
+    {{ form_row(form.NbPlace) }}
+    {{ form_row(form.emplacementPrise) }}
+    {{ form_row(form.Amphi) }}
+    {{ form_row(form.imagePlan) }}
     {{ form_widget(form) }}
     <button class="btn">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}

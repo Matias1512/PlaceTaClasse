@@ -12,6 +12,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+use Gedmo\Sluggable\Util\Urlizer;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\String\Slugger\SluggerInterface;
+
 #[Route('/salle')]
 class SalleController extends AbstractController
 {
@@ -24,7 +28,7 @@ class SalleController extends AbstractController
     }
 
     #[Route('/new', name: 'app_salle_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, SalleRepository $salleRepository,PlaceRepository $PlaceRepository): Response
+    public function new(Request $request, SalleRepository $salleRepository,PlaceRepository $PlaceRepository, SluggerInterface $slugger): Response
     {
         $salle = new Salle();
         $form = $this->createForm(SalleType::class, $salle);
@@ -32,6 +36,22 @@ class SalleController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            /** @var UploadedFile $uploadedFile */
+            $uploadedFile = $form->get('imagePlan')->getData();
+
+            if ($uploadedFile) {
+                $originalFilename = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
+                //
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$uploadedFile->guessExtension();
+                $destination = $this->getParameter('kernel.project_dir').'/public/images';
+
+                $uploadedFile->move(
+                    $destination,
+                    $newFilename
+                );
+
+            $salle->setPlan($newFilename);
 
             $salleRepository->add($salle);
             $tabPrise = explode(',', $salle->getEmplacementPrise());
@@ -56,6 +76,7 @@ class SalleController extends AbstractController
 
             return $this->redirectToRoute('app_salle_index', [], Response::HTTP_SEE_OTHER);
         }
+    }
 
         return $this->renderForm('salle/new.html.twig', [
             'salle' => $salle,
@@ -72,12 +93,27 @@ class SalleController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_salle_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Salle $salle, SalleRepository $salleRepository): Response
+    public function edit(Request $request, Salle $salle, SalleRepository $salleRepository, SluggerInterface $slugger): Response
     {
         $form = $this->createForm(SalleType::class, $salle);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UploadedFile $uploadedFile */
+            $uploadedFile = $form->get('imagePlan')->getData();
+
+            if ($uploadedFile) {
+                $originalFilename = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
+                //
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$uploadedFile->guessExtension();
+                $destination = $this->getParameter('kernel.project_dir').'/public/images';
+
+                $uploadedFile->move(
+                    $destination,
+                    $newFilename
+                );}
+
             $salleRepository->add($salle);
             return $this->redirectToRoute('app_salle_index', [], Response::HTTP_SEE_OTHER);
         }
