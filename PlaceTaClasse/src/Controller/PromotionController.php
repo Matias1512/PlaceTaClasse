@@ -78,33 +78,6 @@ class PromotionController extends AbstractController
         return $this->redirectToRoute('app_promotion_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/import/{nomLong}/{nomCourt}/{tableau}', name: 'app_promotion_import', methods: ['GET'])]
-    public function import(String $nomLong, String $nomCourt, array $tableau, EntityManagerInterface $manager): Response
-    { 
-        
-        $etudiants = (array) $tableau;
-        $promotion = new Promotion();
-        $promotion->setNomCourt($nomCourt);
-        $promotion->setNomLong($nomLong);
-
-        $manager->persist($promotion);
-        $manager->flush();
-
-        for($i = 0; $i < count($etudiants); $i++){
-            $etud =  new Etudiant();
-            $etud.setNom($etudiants[$i]["nom"]);
-            $etud.setPrenom($etudiants[$i]["prenom"]);
-            $etud.setMail($etudiants[$i]["mail"]);
-            $etud.setPromotion($promotion);
-
-            $manager->persist($etud);
-            
-        }
-        $manager->flush();
-
-        return $this->redirectToRoute('app_promotion_index', [], Response::HTTP_SEE_OTHER);
-    }
-
     #[Route('/import/{nomLong}/{nomCourt}', name: 'app_promotion_import_promo', methods: ['GET'])]
     public function import_promo(String $nomLong, String $nomCourt, EntityManagerInterface $manager): Response
     { 

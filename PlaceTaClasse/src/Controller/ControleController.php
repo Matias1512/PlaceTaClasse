@@ -4,11 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Controle;
 use App\Entity\Salle;
-
 use App\Entity\Placement;
-
-
-
 use App\Form\PlacementType;
 use App\Repository\PlaceRepository;
 use App\Entity\Place;
@@ -22,20 +18,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
-
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Doctrine\ORM\EntityManagerInterface;
-
-
-
 use App\Entity\Enseignant;
 use App\Entity\Module;
-
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\Length;
 
@@ -135,12 +125,15 @@ class ControleController extends AbstractController
         return $this->render('planDePlacement/controleSameTime.html.twig', ['tabControleSD'=>$tabControleSD]);
     }
 
-    #[Route('/{id}/recupSalle', name: 'app_controle_recupSalle', methods: ['GET', 'POST'])]
-    public function recupSalle(Request $request, Controle $controle, PromotionRepository $PromotionRepository, SalleRepository $SalleRepository, ControleRepository $ControleRepository, PlacementRepository $PlacementRepository, EntityManagerInterface $manager): Response
+    #[Route('/{id}/generePlacement', name: 'app_controle_generePlacement', methods: ['GET', 'POST'])]
+    public function generePlacement(Request $request, Controle $controle, PromotionRepository $PromotionRepository, SalleRepository $SalleRepository, ControleRepository $ControleRepository, PlacementRepository $PlacementRepository, EntityManagerInterface $manager): Response
     {
         $defaultData = [];
         $form = $this->createFormBuilder($defaultData)
-                        ->add('Salle', EntityType::class, ['class' => Salle::class, 'choice_label' => 'nom', 'multiple' => true,'expanded' => true,])
+                        ->add('Salle', EntityType::class, [ 'class' => Salle::class, 
+                                                            'choice_label' => 'nom', 
+                                                            'multiple' => true,
+                                                            'expanded' => true,])
                         ->getForm();
 
         $form->handleRequest($request);
@@ -202,8 +195,7 @@ class ControleController extends AbstractController
             
             
             //Choisir la salle qui accueil les tiers temps
-            
-            $numSalleTT= 1;
+
             foreach($tabSalles as $salle)
             {
                 $tabPrise= explode(',', $salle->getEmplacementPrise());
@@ -213,7 +205,6 @@ class ControleController extends AbstractController
                     $numSalleTT = $salle->getId();   
                     break;
                 }
-            
             }
 
             //Placer les étudiants
@@ -255,7 +246,6 @@ class ControleController extends AbstractController
             }
 
             //Placer les non TT
-            $cptEtudPlace = 0;
             foreach($tabSalles as $salle)
             {
                 //vérifier si la salle est la même que celle des TT
@@ -303,15 +293,17 @@ class ControleController extends AbstractController
     {
         
         
-        //récupérer le  placement
+        //récupére le  placement
         $placement = $controle->getPlacement()->toArray();
+
+        //récupére les  places
         $places = array($placeRepository->findById($placement[0]->getPlace()));
         for($i = 1; $i < count($placement);  $i++){
             array_push($places,$placeRepository->findOneById($placement[$i]->getPlace()));
         }
         
 
-        //récupérer les salles
+        //récupére les salles
         $salles = array($salleRepository->findById($places[0][0]->getSalle()));
         for($i = 1; $i < count($places);  $i++){
             if(in_array($salles,$placeRepository->findById($places[$i]->getSalle()))){
@@ -322,7 +314,7 @@ class ControleController extends AbstractController
         
         $contenu = '<style>.page { width: 95%; height: 95%; }</style>
                     ';
-//écriture du fichier testPDF.html
+//écriture du fichier PagePDF.html
         //pour chaque salle
         for ($i = 0; $i < count($salles);  $i++){
             $contenu .= '<div class="page">';
@@ -377,10 +369,10 @@ class ControleController extends AbstractController
             $contenu .= '</div>';
         }
         
-        file_put_contents('../templates/testPDF.html', $contenu);
+        file_put_contents('../templates/PagePDF.html', $contenu);
 
         //téléchargement du fichier au format pdf
-        return $this->redirectToRoute('testPDF',["nomFic" => "feuilleEmargement.pdf"]);
+        return $this->redirectToRoute('PagePDF',["nomFic" => "feuilleEmargement.pdf"]);
     }
     
 

@@ -40,11 +40,9 @@ class PlanDePlacementController extends AbstractController
             }
         }
 
-        //écriture du fichier testPDF.html
+        //écriture du fichier PagePDF.html
         $contenu = '<style>.page { width: 95%; height: 95%; }</style>
                     ';
-        
-
         //pour chaque salle
         for ($i = 0; $i < count($salles);  $i++){
             $contenu .= '<div class="page">';
@@ -109,10 +107,10 @@ class PlanDePlacementController extends AbstractController
             $contenu .= '</div>';
         }
         
-        file_put_contents('../templates/testPDF.html', $contenu);
+        file_put_contents('../templates/PagePDF.html', $contenu);
 
         //téléchargement du fichier au format pdf
-        return $this->redirectToRoute('testPDF',["nomFic" => "planDePlacemnt.pdf"]);
+        return $this->redirectToRoute('PagePDF',["nomFic" => "planDePlacemnt.pdf"]);
     }
 }
 

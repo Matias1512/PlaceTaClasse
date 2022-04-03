@@ -23,10 +23,10 @@ use Dompdf\Options;
 
 
 
-class testPDF extends AbstractController
+class PagePDF extends AbstractController
 {
     /**
-     * @Route("/testPDF/{nomFic}", name="testPDF")
+     * @Route("/PagePDF/{nomFic}", name="PagePDF")
      */
     public function index(String $nomFic)
     {
@@ -35,7 +35,7 @@ class testPDF extends AbstractController
             
         // instantiate and use the dompdf class
         $dompdf = new Dompdf();
-        $dompdf->loadHtml(file_get_contents('../templates/testPDF.html'));
+        $dompdf->loadHtml(file_get_contents('../templates/PagePDF.html'));
             
         // (Optional) Setup the paper size and orientation
         $dompdf->setPaper("a4", 'landscape');

@@ -73,8 +73,4 @@ class EtudiantController extends AbstractController
 
         return $this->redirectToRoute('app_etudiant_index', [], Response::HTTP_SEE_OTHER);
     }
-
-    public function import(){
-        
-    }
 }
