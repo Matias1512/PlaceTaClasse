@@ -200,7 +200,7 @@ class ControleController extends AbstractController
             {
                 $tabPrise= explode(',', $salle->getEmplacementPrise());
                 $nbPrise = count($tabPrise);
-                if($nbOrdinateur < $nbPrise)
+                if($nbOrdinateur <= $nbPrise)
                 {
                     $numSalleTT = $salle->getId();   
                     break;

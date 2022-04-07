@@ -49,7 +49,7 @@ class PlanDePlacementController extends AbstractController
             $contenu .="<h1>BUT INFORMATIQUE</h1>";
             $contenu .= '<h2>'.$salles[$i][0]->getNom().'</h2>';
             
-            $path = $salles[$i][0]->getPlan();
+            $path = "images/".$salles[$i][0]->getPlan();
             $type = pathinfo($path, PATHINFO_EXTENSION);
             $data = file_get_contents($path);
             $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
